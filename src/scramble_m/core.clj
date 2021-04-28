@@ -25,5 +25,3 @@
      :headers {"Content-Type" "text/html"}
      :body    "Incorrect query string. Please use something like ?str1=algorithm&str2=logarithm"})
   )
-
-;;(run-jetty handler {:port  3000 :join? false})

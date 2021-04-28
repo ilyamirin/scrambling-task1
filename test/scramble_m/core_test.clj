@@ -21,23 +21,23 @@
 
 (deftest scramble-function-speed-test
   (testing "One iteration must spend less time than 2 millisecond."
-    (def spd (re-find #"[0-9]+\.[0-9]+" (with-out-str (time (scramble "algorithm" "logarithm")))))
-  (is (<= (Double. spd) 0.2))))
+    (let [spd (re-find #"[0-9]+\.[0-9]+" (with-out-str (time (scramble "algorithm" "logarithm"))))]
+      (is (<= (Double. spd) 0.2)))))
 
 (deftest scramble-handler-basic-test
   (testing "Some of the simplest scrambling examples don't work throughout of WEB API."
-    (def response (handler {:query-string "?str1=algorithm&str2=logarithm"}))
-    (is (= 200 (:status response)))
-    (is (= "{\"scrambled?\":true,\"str1\":\"algorithm\",\"str2\":\"logarithm\"}" (:body response)))
+    (let [response (handler {:query-string "?str1=algorithm&str2=logarithm"})]
+      (is (= 200 (:status response)))
+      (is (= "{\"scrambled?\":true,\"str1\":\"algorithm\",\"str2\":\"logarithm\"}" (:body response))))
 
-    (def response (handler {:query-string "?str1=algorithm&str2=logarithme"}))
-    (is (= 200 (:status response)))
-    (is (= "\"scrambled?\":false" (re-find #"\"scrambled\?\":false" (:body response))))
+    (let [response (handler {:query-string "?str1=algorithm&str2=logarithme"})]
+      (is (= 200 (:status response)))
+      (is (= "\"scrambled?\":false" (re-find #"\"scrambled\?\":false" (:body response)))))
 
-    (def response (handler {:query-string "?x=algorithm&y=logarithme"}))
-    (is (= 400 (:status response)))
-    (def response (handler {:query-string "?x="}))
-    (is (= 400 (:status response)))
-    (def response (handler {:query-string ""}))
-    (is (= 400 (:status response)))
+    (let [response (handler {:query-string "?x=algorithm&y=logarithme"})]
+      (is (= 400 (:status response))))
+    (let [response (handler {:query-string "?x="})]
+      (is (= 400 (:status response))))
+    (let [response (handler {:query-string ""})]
+      (is (= 400 (:status response))))
     ))
